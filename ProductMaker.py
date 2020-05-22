@@ -1,3 +1,7 @@
+group1 = ["IPhone", "Samsung", "Other Phone"]
+group2 = ["Apple Watch", "Samsung Watch", "Other watch"]
+group3 = ["Airpods", "Samsung Buds", "Other earphones"]
+
 def calculator(module_one,module_two,module_three):
     print(module_one,module_two,module_three)
     
