@@ -1,11 +1,12 @@
-group1 = ["IPhone", "Samsung", "Other Phone"]
-group2 = ["Apple Watch", "Samsung Watch", "Other watch"]
-group3 = ["Airpods", "Samsung Buds", "Other earphones"]
+group1 = ["Blank","IPhone", "Samsung", "Other Phone"]
+group2 = ["Blank","Apple Watch", "Samsung Watch", "Other watch"]
+group3 = ["Blank","Airpods", "Samsung Buds", "Other earphones"]
 
 def calculator(module_one,module_two,module_three):
-    print(module_one,module_two,module_three)
-    
-
+    print("Module 1: {}\nModule 2: {}\nModule 3: {}".format(group1[module_one],group2[module_two],group3[module_three]))
+    print("Your unique code is: {}{}{}".format(module_one,module_two,module_three))
+    input("Press 'Enter' to restart")
+    menu()
 
 def module_definer():
   module_total = int(input("How many modules would you like you're product to have?\nThere is a max of 3 "))
@@ -31,17 +32,36 @@ def module_picker(module_total):
           calculator(module_one,module_two,module_three)
   else:
       module_definer()
-      
 
 
-print("Welcome to the custom product maker")
-menu_choice = int(input("1. Start New\n2. Upload design\n"))
+def upload():
+    code = input("Enter your unqiue code here: ")                
+    while int(code[0]) >= 4 or int(code[0]) <= -1:
+        code = input("Invalid code, try again:1 ")
+    while int(code[1]) >= 4 or int(code[1]) <= -1:
+        code = input("Invalid code, try again:2 ")
+    while int(code[2]) >= 4 or int(code[2]) <= -1:
+        code = input("Invalid code, try again:3 ")
+    
+    module_one = int(code[0])
+    module_two = int(code[1])
+    module_three = int(code[2])
+    calculator(module_one,module_two,module_three)
+    
 
-if menu_choice == 1:
-    print("Starting new design...")
-    module_definer()
-elif menu_choice == 2:
-    print("paste unique product code here: ")
+def menu():
+    print("Welcome to the custom product maker")
+    menu_choice = input("1. Start New\n2. Upload design\n")
+
+    while int(menu_choice) != 1 and int(menu_choice) != 2:
+        print("Invalid option")
+        menu_choice = input("1. Start New\n2. Upload design\n")
+        
+    if int(menu_choice) == 1:
+        module_definer()
+    elif int(menu_choice) == 2:
+        upload()
 
 
 
+menu()
