@@ -1,5 +1,3 @@
-
-
 def menu():
     type = int(input('Press "1" for Numeric - Binary\nPress "2" for Binary - Numeric\n'))
     if type == 1:
@@ -16,58 +14,58 @@ def menu():
 def bin_num(binary):
     result = 0
     
-    if binary[0] != 0:
+    if binary[0] != "0":
         result += 128
-    elif (binary[0]) != 1:
+    elif (binary[0]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[0]))
         
-    if (binary[1]) != 0:
+    if (binary[1]) != "0":
         result += 64
-    elif (binary[1]) != 1:
+    elif (binary[1]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[1]))
         
-    if (binary[2]) != 0:
+    if (binary[2]) != "0":
         result += 32
-    elif (binary[2]) != 1:
+    elif (binary[2]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[2]))
         
-    if (binary[3]) != 0:
+    if (binary[3]) != "0":
         result += 16
-    elif (binary[3]) != 1:
+    elif (binary[3]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[3]))
         
-    if (binary[4]) != 0:
+    if (binary[4]) != "0":
         result += 8
-    elif (binary[4]) != 1:
+    elif (binary[4]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[4]))
         
-    if (binary[5]) != 0:
+    if (binary[5]) != "0":
         result += 4
-    elif (binary[5]) != 1:
+    elif (binary[5]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[5]))
         
-    if (binary[6]) != 0:
+    if (binary[6]) != "0":
         result += 2
-    elif (binary[6]) != 1:
+    elif (binary[6]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[6]))
 
-    if (binary[7]) != 0:
+    if (binary[7]) != "0":
         result += 1
-    elif (binary[7]) != 1:
+    elif (binary[7]) != "1":
         result = result
     else:
         print("Invalid number: {}".format(binary[7]))
