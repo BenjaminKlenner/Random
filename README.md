@@ -1,2 +1,2 @@
 # Random
-Random small projects
+Benjamin Klenner's Random projects for learning and trying new things
