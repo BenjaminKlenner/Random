@@ -1,40 +1,41 @@
 def pizzapicker():
     pizza_total = 0
     custom_cost = []
-    order = []
+    pizza_order = []
+    drink_order = []
     custom_pizzas = []
     a = 1
     pizza_total = int(input("How many pizzas do you want?\n"))
     i = pizza_total
-    pizzamaker(pizza_total,custom_cost,order,custom_pizzas,a,i)
+    pizzamaker(pizza_total,custom_cost,pizza_order,custom_pizzas,a,i,drink_order)
 
 
-def pizzamaker(pizza_total,custom_cost,order,custom_pizzas,a,i):
+def pizzamaker(pizza_total,custom_cost,pizza_order,custom_pizzas,a,i,drink_order):
     while i > 0:
         pizza = int(input("Pizza {}/{} flavour:\n1. Pepperoni\n2. Hawaiian\n3. Cheese\n4. Custom\n".format(a,pizza_total)))
         if pizza == 1:
-            order.append(1)
+            pizza_order.append(1)
             i -= 1
             a += 1
         elif pizza == 2:
-            order.append(2)
+            pizza_order.append(2)
             i -= 1
             a += 1
         elif pizza == 3:
-            order.append(3)
+            pizza_order.append(3)
             i -= 1
             a += 1
         elif pizza == 4:
             i -= 1
             a += 1
-            custom_pizza(pizza_total,custom_cost,order,custom_pizzas,a,i)
+            custom_pizza(pizza_total,custom_cost,pizza_order,custom_pizzas,a,i,drink_order)
         else:
             while int(pizza) <= 0 and int(pizza) >= 4:
                 pizza = int(input("Pizza {}/{} flavour:\n1. Pepperoni\n2. Hawaiian\n3. Cheese\n4. Custom\n".format(a,pizza_total)))
                 
-    calculator(order,custom_cost,custom_pizzas)
+    sidespicker(pizza_order,custom_cost,custom_pizzas,drink_order)
 
-def custom_pizza(pizza_total,custom_cost,order,custom_pizzas,a,i):
+def custom_pizza(pizza_total,custom_cost,pizza_order,custom_pizzas,a,i,drink_order):
     custom_pizzas.append(len(custom_pizzas) + 1)
     
     #Crust picker
@@ -110,12 +111,46 @@ def custom_pizza(pizza_total,custom_cost,order,custom_pizzas,a,i):
             sauce = int(input("What sauce do you want?\n1. Barbeque\n2. White Garlic\n3. Buffalo\n4. Pesto\n5. None\n"))
             
         
-    pizzamaker(pizza_total,custom_cost,order,custom_pizzas,a,i)
-            
+    pizzamaker(pizza_total,custom_cost,pizza_order,custom_pizzas,a,i,drink_order)
+
+def sidespicker(pizza_order,custom_cost,custom_pizzas,drink_order):     
+    drink_total = int(input("How many drinks do you want?\n"))
+    i = drink_total
+    a = 0
+    while i > 0:
+        drink = int(input("Drink {}/{}:\n1. 1.5L Coke\n2. 1.5L Fanta\n3. 1.5L Lift\n4. 500ml Coke\n5. 500ml Fanta\n6. 500ml Lift\n".format(a,drink_total)))
+        if drink == 1:
+            drink_order.append(1)
+            i -= 1
+            a += 1
+        elif drink == 2:
+            drink_order.append(2)
+            i -= 1
+            a += 1
+        elif drink == 3:
+            drink_order.append(3)
+            i -= 1
+            a += 1
+        elif drink == 4:
+            drink_order.append(4)
+            i -= 1
+            a += 1
+        elif drink == 5:
+            drink_order.append(5)
+            i -= 1
+            a += 1
+        elif drink == 6:
+            drink_order.append(6)
+            i -= 1
+            a += 1
+        else:
+            while int(drink) <= 0 and int(drink) >= 6:
+                drink = int(input("Drink {}/{}:\n1. 1.5L Coke\n2. 1.5L Fanta\n3. 1.5L Lift\n4. 500ml Coke\n5. 500ml Fanta\n6. 500ml Lift\n".format(a,drink_total)))
     
+    calculator(pizza_order,custom_cost,custom_pizzas,drink_order)
 
 
-def calculator(order,custom_cost,custom_pizzas):
+def calculator(pizza_order,custom_cost,custom_pizzas,drink_order):
     #Cost Vars
     #Basic Pizza Costs
     p_1 = 6.00
@@ -149,7 +184,11 @@ def calculator(order,custom_cost,custom_pizzas):
     s_3 = 1.50
     s_4 = 2.00
     s_5 = 0
+    #Drink Costs
+    d1_5l = 3.00
+    d500ml = 2.00
 
+    
     i = len(custom_pizzas)
     custom_pizza_receipt = []
     while i > 0:
@@ -231,27 +270,53 @@ def calculator(order,custom_cost,custom_pizzas):
             custom_pizza_receipt[len(custom_pizza_receipt) - 1] = custom_pizza_receipt[len(custom_pizza_receipt) - 1] + "| None "
         i -= 1
     
-    total_cost = 0
     i = len(custom_cost)
     a = 0
-    total_cost = sum(custom_cost)
         
+    drink_cost = 0
+    drink_receipt = []
+    i = len(drink_order)
+    while i > 0:
+        drink_receipt.append(len(drink_receipt) + 1)
+        if int(drink_order[i - 1]) == 1:
+            drink_cost += d1_5l
+            drink_receipt[len(drink_receipt) - 1] = "1.5L Coke - $" + str(d1_5l)
+        elif int(drink_order[i - 1]) == 2:
+            drink_cost += d1_5l
+            drink_receipt[len(drink_receipt) - 1] = "1.5L Fanta - $" + str(d1_5l)
+        elif int(drink_order[i - 1]) == 3:
+            drink_cost += d1_5l
+            drink_receipt[len(drink_receipt) - 1] = "1.5L Lift - $" + str(d1_5l)
+        elif int(drink_order[i - 1]) == 4:
+            drink_cost += d500ml
+            drink_receipt[len(drink_receipt) - 1] = "500ml Coke - $" + str(d500ml)
+        elif int(drink_order[i - 1]) == 5:
+            drink_cost += d500ml
+            drink_receipt[len(drink_receipt) - 1] = "500ml Fanta - $" + str(d500ml)
+        elif int(drink_order[i - 1]) == 6:
+            drink_cost += d500ml
+            drink_receipt[len(drink_receipt) - 1] = "500ml Lift - $" + str(d500ml)
+        i -= 1
+
     
     pizza_receipt = []
-    i = len(order)
+    i = len(pizza_order)
+    pizza_cost = 0
     while i > 0:
         pizza_receipt.append(len(pizza_receipt) + 1)
-        if int(order[i - 1]) == 1:
-            total_cost += p_1
+        if int(pizza_order[i - 1]) == 1:
+            pizza_cost += p_1
             pizza_receipt[len(pizza_receipt) - 1] = "Pepperoni - $" + str(p_1)
-        elif int(order[i - 1]) == 2:
-            total_cost += p_2
+        elif int(pizza_order[i - 1]) == 2:
+            pizza_cost += p_2
             pizza_receipt[len(pizza_receipt) - 1] = "Hawaiian - $" + str(p_2)
-        elif int(order[i - 1]) == 3:
-            total_cost += p_3
+        elif int(pizza_order[i - 1]) == 3:
+            pizza_cost += p_3
             pizza_receipt[len(pizza_receipt) - 1] = "Cheese - $" + str(p_3)
         i -= 1
-        
+
+
+    #Custom Pizza receipt   
     i = len(custom_pizza_receipt)
     print("\n")
     if i > 0:
@@ -265,18 +330,30 @@ def calculator(order,custom_cost,custom_pizzas):
         print("--\nTotal cost for custom pizzas : ${}".format(sum(custom_cost)))
         print("---\n")
 
-    i = len(order)
+    #Normal Pizza receipt
+    i = len(pizza_order)
     if i > 0:
         a = 0
         print("Normal Pizzas:\n")
         while a < i:
             print("{}".format(pizza_receipt[0 + a]))
             a += 1
-        print("--\nTotal cost for normal pizzas : ${}".format(total_cost - sum(custom_cost)))
+        print("--\nTotal cost for normal pizzas : ${}".format(pizza_cost))
+        print("---\n")
+    
+    #Drink receipt
+    i = len(drink_order)
+    if i > 0:
+        a = 0
+        print("Drinks:\n")
+        while a < i:
+            print("{}".format(drink_receipt[0 + a]))
+            a += 1
+        print("--\nTotal cost for drinks : ${}".format(drink_cost))
         print("---\n")
 
     
-    
+    total_cost = sum(custom_cost) + pizza_cost + drink_cost
     print("Total Cost: ${}\n".format(total_cost))
     print("----------=+=----------")
     hold = input("Press enter to restart")
