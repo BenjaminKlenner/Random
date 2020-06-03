@@ -103,7 +103,7 @@ def deposit(account_list,account,balances):
 def transfer(account_list,account,balances):
 
 
-    
+        #print statement that lists accounts
     print("Which account would you like to transfer to?")
     a = 0
     i = len(account_list)
@@ -114,20 +114,11 @@ def transfer(account_list,account,balances):
         i -= 1
     i = len(account_list)
     option = int(input(""))
+        #print ends
+    
     while i > 0:
         #doesn't work
-        if option <= 0 or option >= len(account_list):
-            print("Which account would you like to transfer to?")
-            b = 0
-            c = len(account_list)
-            while c > 0:
-                if b != account:
-                    print("{}. {}".format(b + 1,account_list[b]))
-                b += 1
-                c -= 1
-            option = int(input(""))
-        
-        elif option - 1 == account:
+        if option < 0 or option > len(account_list):
             print("Which account would you like to transfer to?")
             b = 0
             c = len(account_list)
@@ -140,6 +131,18 @@ def transfer(account_list,account,balances):
             
         elif option - 1 != account:
             transfer_account = option - 1
+        
+        elif option - 1 == account:
+            print("Which account would you like to transfer to?")
+            b = 0
+            c = len(account_list)
+            while c > 0:
+                if b != account:
+                    print("{}. {}".format(b + 1,account_list[b]))
+                b += 1
+                c -= 1
+            option = int(input(""))
+            
         i -= 1
         a += 1
     
