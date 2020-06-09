@@ -42,27 +42,32 @@ def addition(numbers):
     print("Addition")
     awnser = 0
     a = 0
-    b = len.numbers()
+    b = len(numbers)
     while a < b - 1:
-        awnser += numbers[a] + numbers[a + 1]
+        awnser += int(numbers[a]) + int(numbers[a + 1])
+        if a + 1 == b:
+            awnser += int(numbers[a + 2])
+        a += 2
+    print(awnser)
 
     
 def subtraction(numbers):
     print("subtraction")
+    awnser = 0
     a = 0
-    b = numbers.len()
+    b = len(numbers)
 
     
 def multiplication(numbers):
     print("multiplication")
     a = 0
-    b = numbers.len()
+    b = len(numbers)
 
     
 def division(numbers):
     print("division")
     a = 0
-    b = numbers.len()
+    b = len(numbers)
 
     
 
