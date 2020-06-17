@@ -9,6 +9,7 @@ def press():
 def bomb():
     print("Boom!")
 
+    
 def windowmaker():
 
     #Window Settings
@@ -44,22 +45,26 @@ def windowmaker():
 def bombplacer(box1,box2,box3,box4,box5,box6,box7,box8,box9):
     boxtotal = 9
     bombtotal = 3
-    bomb = [1]
+    bomb = []
     a = 0
-    while a < bombtotal:
+    while len(bomb) < bombtotal:
         newbomb = random.randint(1, boxtotal)
-        a += 1
-        x = 0
-        while x < len(bomb) + 1:
-            if len(bomb) == 0:
-                bomb.append(newbomb)
-                x += 1
-            elif bomb[x] == newbomb:
-                newbomb = random.randint(1, boxtotal)
-            else:
-                bomb.append(newbomb)
-                x += 1
-        
+        if len(bomb) != 0:
+            while a < len(bomb):
+                if newbomb == bomb[a]:
+                    while newbomb == bomb[a]:
+                        newbomb = random.randint(1, boxtotal)
+                        print("Repeat number detected")
+                else:
+                    bomb.append(newbomb)
+                    a += 1
+                    print("Number good")
+                
+        else:
+            bomb.append(newbomb)
+            a += 1
+            print("First Number")
+            
     a = 0
     i = len(bomb) - 1
     while a < len(bomb):
