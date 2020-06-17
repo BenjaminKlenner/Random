@@ -15,87 +15,109 @@ def windowmaker():
     #Window Settings
     root = Tk()
     root.title("Minesweeper")
-    root.geometry('250x100')
+    root.geometry('300x100')
 
 
-    box1 = Button(root,text="1",command=press)
-    box2 = Button(root,text="2",command=press)
-    box3 = Button(root,text="3",command=press)
-    box4 = Button(root,text="4",command=press)
-    box5 = Button(root,text="5",command=press)
-    box6 = Button(root,text="6",command=press)
-    box7 = Button(root,text="7",command=press)
-    box8 = Button(root,text="8",command=press)
-    box9 = Button(root,text="9",command=press)
+    box1 = Button(root,command=press)
+    box2 = Button(root,command=press)
+    box3 = Button(root,command=press)
+    box4 = Button(root,command=press)
+    box5 = Button(root,command=press)
+    box6 = Button(root,command=press)
+    box7 = Button(root,command=press)
+    box8 = Button(root,command=press)
+    box9 = Button(root,command=press)
+    box10 = Button(root,command=press)
+    box11 = Button(root,command=press)
+    box12 = Button(root,command=press)
+    box13 = Button(root,command=press)
+    box14 = Button(root,command=press)
+    box15 = Button(root,command=press)
+    box16 = Button(root,command=press)
 
     box1.grid(column=0,row=0)
     box2.grid(column=1,row=0)
     box3.grid(column=2,row=0)
-    box4.grid(column=0,row=1)
-    box5.grid(column=1,row=1)
-    box6.grid(column=2,row=1)
-    box7.grid(column=0,row=2)
-    box8.grid(column=1,row=2)
-    box9.grid(column=2,row=2)
+    box4.grid(column=3,row=0)
+    box5.grid(column=0,row=1)
+    box6.grid(column=1,row=1)
+    box7.grid(column=2,row=1)
+    box8.grid(column=3,row=1)
+    box9.grid(column=0,row=2)
+    box10.grid(column=1,row=2)
+    box11.grid(column=2,row=2)
+    box12.grid(column=3,row=2)
+    box13.grid(column=0,row=3)
+    box14.grid(column=1,row=3)
+    box15.grid(column=2,row=3)
+    box16.grid(column=3,row=3)
 
-    bombplacer(box1,box2,box3,box4,box5,box6,box7,box8,box9)
+    bombplacer(box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16)
     root.mainloop()
 
     
-def bombplacer(box1,box2,box3,box4,box5,box6,box7,box8,box9):
-    boxtotal = 9
+def bombplacer(box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14,box15,box16):
+    boxtotal = 16
     bombtotal = 3
     bomb = []
     a = 0
+    i = 0
+
+    if bombtotal > boxtotal:
+        bombtotal = boxtotal - 1
+
     while len(bomb) < bombtotal:
+        i = 0
         newbomb = random.randint(1, boxtotal)
-        if len(bomb) != 0:
-            while a < len(bomb):
-                if newbomb == bomb[a]:
-                    while newbomb == bomb[a]:
-                        newbomb = random.randint(1, boxtotal)
-                        print("Repeat number detected")
-                else:
-                    bomb.append(newbomb)
-                    a += 1
-                    print("Number good")
-                
-        else:
+        if len(bomb) == 0:
             bomb.append(newbomb)
-            a += 1
-            print("First Number")
-            
+        else:
+            while i < len(bomb):
+                if newbomb == bomb[i]:
+                    newbomb = random.randint(1, boxtotal)
+                    i = 0
+                else:
+                    i += 1
+            else:
+                bomb.append(newbomb)
+                i = 0
+                 
     a = 0
     i = len(bomb) - 1
     while a < len(bomb):
         print("Set {} to state: bomb".format(bomb[i]))
         if bomb[i] == 1:
-            box1["text"] = "bomb"
             box1["command"] = bomb
         elif bomb[i] == 2:
-            box2["text"] = "bomb"
             box2["command"] = bomb
         elif bomb[i] == 3:
-            box3["text"] = "bomb"
             box3["command"] = bomb
         elif bomb[i] == 4:
-            box4["text"] = "bomb"
             box4["command"] = bomb
         elif bomb[i] == 5:
-            box5["text"] = "bomb"
             box5["command"] = bomb
         elif bomb[i] == 6:
-            box6["text"] = "bomb"
             box6["command"] = bomb
         elif bomb[i] == 7:
-            box7["text"] = "bomb"
             box7["command"] = bomb
         elif bomb[i] == 8:
-            box8["text"] = "bomb"
             box8["command"] = bomb
         elif bomb[i] == 9:
-            box9["text"] = "bomb"
             box9["command"] = bomb
+        elif bomb[i] == 10:
+            box10["command"] = bomb
+        elif bomb[i] == 11:
+            box11["command"] = bomb
+        elif bomb[i] == 12:
+            box12["command"] = bomb
+        elif bomb[i] == 13:
+            box13["command"] = bomb
+        elif bomb[i] == 14:
+            box14["command"] = bomb
+        elif bomb[i] == 15:
+            box15["command"] = bomb
+        elif bomb[i] == 16:
+            box16["command"] = bomb
         i -= 1
         a += 1
         
