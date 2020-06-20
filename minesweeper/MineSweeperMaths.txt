@@ -6,13 +6,10 @@ Maths to calculate if box is on an edge:
 
 rules:
 total number of boxes = t
-t = number squared
-
-
 square root of t = s (size)
 
 
-if b
+if box 
 
 
 
