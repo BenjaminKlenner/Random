@@ -1,0 +1,23 @@
+1, 4, 9, 16, 25, 36, 49, 64
+
+
+
+Maths to calculate if box is on an edge:
+
+rules:
+total number of boxes = t
+t = number squared
+
+
+square root of t = s (size)
+
+
+if b
+
+
+
+If box is on the edge, maths to make sure it only checks the right box:
+
+
+
+
