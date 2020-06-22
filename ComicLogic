@@ -1,0 +1,57 @@
+#This document has all the different types of logic needed for the comic book program
+
+#Outline:
+#I will use lists to store all the different types of comic books, how many of them there are and how much they cost
+
+
+
+#Making lists
+Name = ["Spiderman", "Superman"]
+Stock = [18, 6]
+Price = [11.99, 5.99]
+
+
+
+    
+#Menu 
+#def Menu():
+
+
+
+
+
+
+        
+#Getting data:
+def Pull():
+    
+
+    ID = int(input("What entry would you like")) - 1
+
+    print("Name: {}\nStock: {}\nPrice: ${}".format(Name[ID], Stock[ID], Price[ID]))
+
+    Push()
+
+
+
+
+
+#Adding new data
+def Push():
+    NewName = str(input("What is the name of the new comic book?"))
+    NewStock = int(input("How much stock of {} do you have?".format(NewName)))
+    NewPrice = float(input("How much will {} cost?".format(NewName)))
+
+    Name.append(NewName)
+    Stock.append(NewStock)
+    Price.append(NewPrice)
+
+    print("Reference number for {} is: {}".format(NewName,len(Name)))
+
+    Pull()
+
+
+
+
+
+Pull()
