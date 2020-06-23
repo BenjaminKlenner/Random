@@ -13,18 +13,19 @@ Stock = []
 Price = []
 
 f = open("database.txt", "r")
-f1 = f.readlines()
-for data in f1:
-    if data != "###":
-        Name.append(data)
-    else:
-        for data in f1:
-            if data != "###":
-                Stock.append(data)
-            else:
-                for data in f1:
-                    if data != "###":
-                        Price.append(data)
+i = 1
+
+
+
+while True:
+    data = str(f.readline(i))
+    print(data)
+    i += 1
+    if data == "":
+        break
+
+
+
                 
 print(Name)
 
