@@ -11,24 +11,28 @@ import os
 Name = []
 Stock = []
 Price = []
+spacer = ("-=-")
 
-f = open("database.txt", "r")
-i = 1
+def Start():
+    space = 0
+    f = open("database.txt", "r")
+    i = 1
+
+    while True:
+        data = str(f.readline())
+        
+        i += 1
+        if data == "":
+            break
+        
+        if data == spacer:
+            space += 1
 
 
 
-while True:
-    data = str(f.readline(i))
-    print(data)
-    i += 1
-    if data == "":
-        break
-
-
-
-                
-print(Name)
-
+    print(space)                
+    print(Name)
+    Menu()
 
 
 
@@ -52,9 +56,11 @@ def Menu():
 def Display():
     i = 0
     while i != len(Name):
-        print("{} | {} | {}".format(Name[i],Stock[i],Price[i]))
+        print("{} | {} | {} | ${}".format(i + 1,Name[i],Stock[i],Price[i]))
         i += 1
-    print("\n----------=+=----------\n\n")
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
     Menu()
     
 
@@ -66,8 +72,9 @@ def Pull():
     ID = int(input("What entry would you like\n")) - 1
 
     print("Name: {}\nStock: {}\nPrice: ${}".format(Name[ID], Stock[ID], Price[ID]))
-    print("\n----------=+=----------\n\n")
-
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
     Menu()
 
 
@@ -85,26 +92,39 @@ def Push():
     Price.append(NewPrice)
 
     print("Reference number for {} is: {}".format(NewName,len(Name)))
-    print("\n----------=+=----------\n\n")
-    
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
     Menu()
 
 
 #Saving information
 def Save():
+    
     if os.path.exists("database.txt"):
         os.remove("database.txt")
     f = open("database.txt", "a")
 
     i = 0
     while i != len(Name):
-        f.write("{} | {} | {}\n".format(Name[i],Stock[i],Price[i]))
+        f.write("{}\n".format(Name[i]))
         i += 1
+    f.write(spacer + "\n")
+    i = 0
+    while i != len(Stock):
+        f.write("{}\n".format(Stock[i]))
+        i += 1
+    f.write(spacer + "\n")
+    i = 0
+    while i != len(Price):
+        f.write("{}\n".format(Price[i]))
+        i += 1
+    f.write(spacer)
     f.close()
 
 
 
-Menu()
+Start()
 
 
 
