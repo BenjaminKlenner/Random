@@ -11,27 +11,33 @@ import os
 Name = []
 Stock = []
 Price = []
-spacer = ("-=-")
+spacer = "-=-"
 
+
+#Creates lists based off stored data in file
 def Start():
     space = 0
     f = open("database.txt", "r")
     i = 1
 
     while True:
-        data = str(f.readline())
-        
+        data = str(f.readline())[:-1]
         i += 1
         if data == "":
             break
         
-        if data == spacer:
+        if str(data) == str(spacer):
             space += 1
+        elif space == 0:
+            Name.append(data)
+        elif space == 1:
+            Stock.append(data)
+        elif space == 2:
+            Price.append(data)
+        elif space == 3:
+            break
 
-
-
-    print(space)                
-    print(Name)
+    f.close()
     Menu()
 
 
@@ -39,7 +45,17 @@ def Start():
     
 #Menu 
 def Menu():
-    option = int(input("What would you like to do?\n1. Display database\n2. Add new comic\n3. Pull specific data\n4. Save and close\n"))
+    close = False
+
+    op1 = "1. Display database\n"
+    op2 = "2. Add new comic\n"
+    op3 = "3. Pull specific data\n"
+    op4 = "4. Remove specific data\n"
+    op5 = "5. Edit specific data\n"
+    op6 = "6. Save\n"
+    op7 = "7. Save and close\n"
+    
+    option = int(input("What would you like to do?\n{}{}{}{}{}{}{}".format(op1, op2, op3, op4, op5, op6, op7)))
 
     if option == 1:
         Display()
@@ -48,7 +64,14 @@ def Menu():
     if option == 3:
         Pull()
     if option == 4:
-        Save()
+        Remove()
+    if option == 5:
+        Edit()
+    if option == 6:
+        Save(close)
+    if option == 7:
+        close = True
+        Save(close)
 
 
 
@@ -69,7 +92,7 @@ def Display():
 def Pull():
     
 
-    ID = int(input("What entry would you like\n")) - 1
+    ID = int(input("What entry would you like?\n")) - 1
 
     print("Name: {}\nStock: {}\nPrice: ${}".format(Name[ID], Stock[ID], Price[ID]))
     print("\n----------=+=----------")
@@ -78,8 +101,43 @@ def Pull():
     Menu()
 
 
+#Remove data:
+def Remove():
+    ID = int(input("What entry would you like to remove?\n")) - 1
+    delete = int(input("Are you sure you want to remove:\nName: {} | Stock: {} | Price: ${}\n1. Yes\n2. No\n".format(Name[ID], Stock[ID], Price[ID])))
+
+    if delete == 1:
+        Name.pop(ID)
+        Stock.pop(ID)
+        Price.pop(ID)
+        print("\n----------=+=----------")
+        skip = input("Press 'Enter' to continue")
+        print("\n\n")
+        Menu()
+    elif delete == 2:
+        print("\n\n")
+        Menu()
 
 
+#Edit data:
+def Edit():
+    ID = int(input("What entry would you like to edit?\n")) - 1
+
+    NewName = str(input("New Name:\nCurrent: {}\nPress 'Enter' to keep original name\n".format(Name[ID])))
+    NewStock = int(input("New Stock:\nCurrent: {}\nPress 'Enter' to keep original stock\n".format(Stock[ID])))
+    NewPrice = float(input("New Price:\nCurrent: {}\nPress 'Enter' to keep original price\n".format(Price[ID])))
+
+    Name[ID] = NewName
+    Stock[ID] = NewStock
+    Price[ID] = NewPrice
+    print("New book:\nName: {} | Stock: {} | Price: ${}".format(Name[ID], Stock[ID], Price[ID]))
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
+    Menu()
+
+
+    
 
 #Adding new data
 def Push():
@@ -99,7 +157,7 @@ def Push():
 
 
 #Saving information
-def Save():
+def Save(close):
     
     if os.path.exists("database.txt"):
         os.remove("database.txt")
@@ -122,18 +180,10 @@ def Save():
     f.write(spacer)
     f.close()
 
+    if close == True:
+        print("Closing")
+    else:
+        Menu()
 
 
 Start()
-
-
-
-
-
-
-
-
-
-
-
-
