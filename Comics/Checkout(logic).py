@@ -158,7 +158,7 @@ def CheckStock():
 
 
 #Saving information
-def Save(close):
+def Save():
     
     if os.path.exists("database.txt"):
         os.remove("database.txt")
