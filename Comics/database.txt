@@ -1,6 +1,53 @@
+#Name:
 Batman
+Superman
+Green Lantern
+Aquaman
+Spiderman
+Ironman
+Incredible Hulk
+Captain America
+Thor
+Fantastic Four
+Guardians Of The Galaxy
+Antman
+Hawkeye
+Asterix and Obelix
+Marvel
+Wonder Woman
 -=-
+#Stock:
+20
+20
+20
+20
+10
+20
+20
+20
+20
+20
+20
+20
+20
+20
+30
 20
 -=-
+#Price:
 14.99
--=-
+14.99
+9.99
+9.99
+14.99
+14.99
+9.99
+9.99
+9.99
+9.99
+9.99
+9.99
+9.99
+14.99
+24.99
+9.99
