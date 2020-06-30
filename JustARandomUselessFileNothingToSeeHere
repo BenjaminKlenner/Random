@@ -1,0 +1,46 @@
+Geart = 150
+Grasst = 80
+Gast = 20
+
+def all():
+    Gear = int(input("Gear amount\n"))
+    Grass = int(input("Grass amount\n"))
+    Gas = int(input("Gas amount\n"))
+
+
+    Geara = Geart / Gear
+    Grassa = Grasst / Grass
+    Gasa = Gast / Gas
+
+    print(f"Gear: {Geara:.2f}")
+    print(f"Grass: {Grassa:.2f}")
+    print(f"Gas: {Gasa:.2f}")
+
+    one(Geara, Grassa, Gasa)
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
+                                 
+def one(Geara, Grassa, Gasa):
+    while True:
+        ptotal = 0
+        Gearyes = int(input("Gear?\n1. Yes\n2. No\n"))
+        Grassyes = int(input("Grass?\n1. Yes\n2. No\n"))
+        Gasyes = int(input("Gas?\n1. Yes\n2. No\n"))
+
+        if Gearyes == 1:
+            ptotal += Geara
+        if Grassyes == 1:
+            ptotal += Grassa
+        if Gasyes == 1:
+            ptotal += Gasa
+
+        print(ptotal)
+        print("\n----------=+=----------")
+        skip = input("Press 'Enter' to continue")
+        print("\n\n")
+    
+all()
+    
+
+    
