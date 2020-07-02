@@ -1,0 +1,242 @@
+import os
+from tkinter import *
+from tkinter.ttk import *
+Windowx = "510"
+Windowy = "500"
+WindowName = "Comic Book Shop"
+
+window = Tk()
+window.title(WindowName)
+window.geometry(Windowx + "x"+ Windowy)
+MenuF = Frame(window)
+DisplayF = Frame(window)
+NameL = Label(DisplayF, text="Name:", borderwidth=2,width = 25, relief="solid")
+NameL.grid(column=1,row=1)
+StockL = Label(DisplayF, text="Stock:", borderwidth=2,width = 25, relief="solid")
+StockL.grid(column=2,row=1)
+PriceL = Label(DisplayF, text="Price:", borderwidth=2,width = 25, relief="solid")
+PriceL.grid(column=3,row=1)
+
+#Making lists
+Name = []
+Stock = []
+Price = []
+spacer = "-=-"
+
+
+#Creates lists based off stored data in file
+def Start():
+    space = 0
+    f = open("database.txt", "r")
+    i = 1
+
+    while True:
+        data = str(f.readline())[:-1]
+        i += 1
+        if data == "":
+            break
+        if data[0] == "#":
+            continue
+        
+        if str(data) == str(spacer):
+            space += 1
+        elif space == 0:
+            Name.append(data)
+        elif space == 1:
+            Stock.append(data)
+        elif space == 2:
+            Price.append(data)
+        elif space == 3:
+            break
+
+    f.close()
+    i = 0
+    while i < len(Name):
+        TableItem = Label(DisplayF, text=Name[i], borderwidth=2,width = 25, relief="groove")
+        TableItem.grid(column=1,row=i + 2)
+        TableItem = Label(DisplayF, text=Stock[i], borderwidth=2,width = 25, relief="groove")
+        TableItem.grid(column=2,row=i + 2)
+        TableItem = Label(DisplayF, text=Price[i], borderwidth=2,width = 25, relief="groove")
+        TableItem.grid(column=3,row=i + 2)
+        i += 1
+
+
+    
+    PushB = Button(MenuF,width=10,text="Push",command=Push)
+    PushB.grid(column=1, row=1)
+    PullB = Button(MenuF,width=10,text="Pull",command=Pull)
+    PullB.grid(column=2, row=1)
+    RemoveB = Button(MenuF,width=10,text="Remove",command=Remove)
+    RemoveB.grid(column=3, row=1)
+    EditB = Button(MenuF,width=10,text="Edit",command=Edit)
+    EditB.grid(column=4, row=1)
+    AddStockB = Button(MenuF,width=11,text="Add Stock",command=AddStock)
+    AddStockB.grid(column=5, row=1)
+    CheckStockB = Button(MenuF,width=12,text="Check Stock",command=CheckStock)
+    CheckStockB.grid(column=6, row=1)
+    CloseB = Button(MenuF,width=10,text="Close",command=Close)
+    CloseB.grid(column=7, row=1)
+    
+    Menu()
+
+
+
+def AddStock():
+    ID = int(input("What entry would you like to add stock too?\n")) - 1
+    NewStock = int(input("New Stock for {}:\nCurrent: {}\n".format(Name[ID],Stock[ID])))
+    Stock[ID] = int(Stock[ID]) + NewStock
+    print("Restocked {}\nNew Stock: {}".format(Name[ID], Stock[ID]))
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
+    Save()
+
+def Close():
+    print("Closing...")
+
+
+#Check Stock:
+def CheckStock():
+    LowStock = []
+    i = 0
+    
+    StockBelow = int(input("Stock below or equal too __?\n"))
+    
+    while i < len(Stock):
+        if int(Stock[i]) <= StockBelow:
+            LowStock.append(Name[i])
+            LowStock.append(Stock[i])
+            i += 1
+        else:
+            i += 1
+            continue
+    if len(LowStock) == 0:
+        print("All stock is good")
+    else:
+        print("{} items have low stock\n-----\nItems:\n".format(int(len(LowStock)/2)))
+        i = 0
+        while i < len(LowStock):
+            print("{} | {}".format(LowStock[i],LowStock[i + 1]))
+            i += 2
+        print("\n----------=+=----------")
+        skip = input("Press 'Enter' to continue")
+        print("\n\n")
+
+
+            
+
+
+
+        
+#Getting data:
+def Pull():
+    
+
+    ID = int(input("What entry would you like?\n")) - 1
+
+    print("Name: {}\nStock: {}\nPrice: ${}".format(Name[ID], Stock[ID], Price[ID]))
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
+    Menu()
+
+
+#Remove data:
+def Remove():
+    ID = int(input("What entry would you like to remove?\n")) - 1
+    delete = int(input("Are you sure you want to remove:\nName: {} | Stock: {} | Price: ${}\n1. Yes\n2. No\n".format(Name[ID], Stock[ID], Price[ID])))
+
+    if delete == 1:
+        Name.pop(ID)
+        Stock.pop(ID)
+        Price.pop(ID)
+        print("\n----------=+=----------")
+        skip = input("Press 'Enter' to continue")
+        print("\n\n")
+        Save()
+    elif delete == 2:
+        print("\n\n")
+        Menu()
+
+
+#Edit data:
+def Edit():
+    ID = int(input("What entry would you like to edit?\n")) - 1
+
+    NewName = input("New Name:\nCurrent: {}\nPress 'Enter' to keep original name\n".format(Name[ID]))
+    NewStock = input("New Stock:\nCurrent: {}\nPress 'Enter' to keep original stock\n".format(Stock[ID]))
+    NewPrice = input("New Price:\nCurrent: {}\nPress 'Enter' to keep original price\n".format(Price[ID]))
+
+
+    if str(NewName) != "":
+        Name[ID] = NewName
+    if str(NewStock) != "":
+        Stock[ID] = NewStock
+    if str(NewPrice) != "":
+        Price[ID] = NewPrice
+    print("New data:\nName: {} | Stock: {} | Price: ${}".format(Name[ID], Stock[ID], Price[ID]))
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
+    Save()
+
+
+    
+
+#Adding new data
+def Push():
+    NewName = str(input("What is the name of the new comic book?\n"))
+    NewStock = int(input("How much stock of {} do you have?\n".format(NewName)))
+    NewPrice = float(input("How much will {} cost?\n".format(NewName)))
+
+    Name.append(NewName)
+    Stock.append(NewStock)
+    Price.append(NewPrice)
+
+    print("Reference number for {} is: {}".format(NewName,len(Name)))
+    print("\n----------=+=----------")
+    skip = input("Press 'Enter' to continue")
+    print("\n\n")
+    Save()
+
+
+#Saving information
+def Save():
+    
+    if os.path.exists("database.txt"):
+        os.remove("database.txt")
+    f = open("database.txt", "a")
+
+    i = 0
+    f.write("#Name:\n")
+    while i != len(Name):
+        f.write("{}\n".format(Name[i]))
+        i += 1
+    f.write(spacer + "\n")
+    f.write("#Stock:\n")
+    i = 0
+    while i != len(Stock):
+        f.write("{}\n".format(Stock[i]))
+        i += 1
+    f.write(spacer + "\n")
+    f.write("#Price:\n")
+    i = 0
+    while i != len(Price):
+        f.write("{}\n".format(Price[i]))
+        i += 1
+    f.close()
+    Menu()
+
+
+
+def Menu():
+    
+
+    MenuF.pack(padx=1,pady=1)
+    DisplayF.pack(padx=1,pady=1)
+
+
+Start()
+
+
+    
