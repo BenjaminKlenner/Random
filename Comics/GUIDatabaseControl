@@ -1,15 +1,27 @@
 import os
 from tkinter import *
 from tkinter.ttk import *
-Windowx = "510"
+
+
+#Making lists
+Name = []
+Stock = []
+Price = []
+Labels = []
+spacer = "-=-"
+
+Windowx = "550"
 Windowy = "500"
 WindowName = "Comic Book Shop"
-
 window = Tk()
 window.title(WindowName)
 window.geometry(Windowx + "x"+ Windowy)
 MenuF = Frame(window)
 DisplayF = Frame(window)
+ControlPush = Frame(window)
+ControlRemove = Frame(window)
+IDL = Label(DisplayF, text="ID:", borderwidth=2,width = 5, relief="solid")
+IDL.grid(column=0,row=1)
 NameL = Label(DisplayF, text="Name:", borderwidth=2,width = 25, relief="solid")
 NameL.grid(column=1,row=1)
 StockL = Label(DisplayF, text="Stock:", borderwidth=2,width = 25, relief="solid")
@@ -17,11 +29,7 @@ StockL.grid(column=2,row=1)
 PriceL = Label(DisplayF, text="Price:", borderwidth=2,width = 25, relief="solid")
 PriceL.grid(column=3,row=1)
 
-#Making lists
-Name = []
-Stock = []
-Price = []
-spacer = "-=-"
+
 
 
 #Creates lists based off stored data in file
@@ -48,20 +56,8 @@ def Start():
             Price.append(data)
         elif space == 3:
             break
-
-    f.close()
-    i = 0
-    while i < len(Name):
-        TableItem = Label(DisplayF, text=Name[i], borderwidth=2,width = 25, relief="groove")
-        TableItem.grid(column=1,row=i + 2)
-        TableItem = Label(DisplayF, text=Stock[i], borderwidth=2,width = 25, relief="groove")
-        TableItem.grid(column=2,row=i + 2)
-        TableItem = Label(DisplayF, text=Price[i], borderwidth=2,width = 25, relief="groove")
-        TableItem.grid(column=3,row=i + 2)
-        i += 1
-
-
     
+
     PushB = Button(MenuF,width=10,text="Push",command=Push)
     PushB.grid(column=1, row=1)
     PullB = Button(MenuF,width=10,text="Pull",command=Pull)
@@ -76,8 +72,30 @@ def Start():
     CheckStockB.grid(column=6, row=1)
     CloseB = Button(MenuF,width=10,text="Close",command=Close)
     CloseB.grid(column=7, row=1)
-    
+
+    f.close()
+    Reload()
+
+def Reload():
+    i = 0
+    for TableItem in Labels:
+        TableItem.grid_forget()
+    while i < len(Name):
+        TableItem = Label(DisplayF, text=i + 1, borderwidth=2,width = 5, relief="groove")
+        TableItem.grid(column=0,row=i + 2)
+        Labels.append(TableItem)
+        TableItem = Label(DisplayF, text=Name[i], borderwidth=2,width = 25, relief="groove")
+        TableItem.grid(column=1,row=i + 2)
+        Labels.append(TableItem)
+        TableItem = Label(DisplayF, text=Stock[i], borderwidth=2,width = 25, relief="groove")
+        TableItem.grid(column=2,row=i + 2)
+        Labels.append(TableItem)
+        TableItem = Label(DisplayF, text=Price[i], borderwidth=2,width = 25, relief="groove")
+        TableItem.grid(column=3,row=i + 2)
+        Labels.append(TableItem)
+        i += 1
     Menu()
+    
 
 
 
@@ -143,20 +161,31 @@ def Pull():
 
 #Remove data:
 def Remove():
-    ID = int(input("What entry would you like to remove?\n")) - 1
-    delete = int(input("Are you sure you want to remove:\nName: {} | Stock: {} | Price: ${}\n1. Yes\n2. No\n".format(Name[ID], Stock[ID], Price[ID])))
-
-    if delete == 1:
-        Name.pop(ID)
-        Stock.pop(ID)
-        Price.pop(ID)
-        print("\n----------=+=----------")
-        skip = input("Press 'Enter' to continue")
-        print("\n\n")
+    DisplayF.pack_forget()
+    MenuF.pack_forget()
+    ControlRemove.pack()
+    RemoveIDLabel = Label(ControlRemove,text="ID:")
+    RemoveIDLabel.grid(column=1, row=4)
+    RemoveIDEntry = Entry(ControlRemove,width=10)
+    RemoveIDEntry.grid(column=2, row=4)
+    
+    
+   
+    def RemoveStop():
+        ControlRemove.pack_forget()
         Save()
-    elif delete == 2:
-        print("\n\n")
-        Menu()
+    RemoveStop = Button(ControlRemove,text="Back",command=RemoveStop,width=10)
+    RemoveStop.grid(column=2, row=8)
+    
+    def RemoveSubmitted():
+        Name.pop(int(RemoveIDEntry.get()) - 1)
+        Stock.pop(int(RemoveIDEntry.get()) - 1)
+        Price.pop(int(RemoveIDEntry.get()) - 1)
+        ControlRemove.pack_forget()
+        Save()
+    RemoveSubmit = Button(ControlRemove,text="Submit",command=RemoveSubmitted,width=10)
+    RemoveSubmit.grid(column=2, row=7)
+
 
 
 #Edit data:
@@ -185,19 +214,41 @@ def Edit():
 
 #Adding new data
 def Push():
-    NewName = str(input("What is the name of the new comic book?\n"))
-    NewStock = int(input("How much stock of {} do you have?\n".format(NewName)))
-    NewPrice = float(input("How much will {} cost?\n".format(NewName)))
+    DisplayF.pack_forget()
+    MenuF.pack_forget()
+    ControlPush.pack()
+    PushNameLabel = Label(ControlPush,text="Name:")
+    PushNameLabel.grid(column=1, row=4)
+    PushNameEntry = Entry(ControlPush,width=10)
+    PushNameEntry.grid(column=2, row=4)
 
-    Name.append(NewName)
-    Stock.append(NewStock)
-    Price.append(NewPrice)
+    PushStockLabel = Label(ControlPush,text="Stock:")
+    PushStockLabel.grid(column=1, row=5)
+    PushStockEntry = Entry(ControlPush,width=10)
+    PushStockEntry.grid(column=2, row=5)
 
-    print("Reference number for {} is: {}".format(NewName,len(Name)))
-    print("\n----------=+=----------")
-    skip = input("Press 'Enter' to continue")
-    print("\n\n")
-    Save()
+    PushPriceLabel = Label(ControlPush,text="Price:")
+    PushPriceLabel.grid(column=1, row=6)
+    PushPriceEntry = Entry(ControlPush,width=10)
+    PushPriceEntry.grid(column=2, row=6)
+
+    def PushStop():
+        ControlPush.pack_forget()
+        Save()
+    PushStop = Button(ControlPush,text="Back",command=PushStop,width=10)
+    PushStop.grid(column=2, row=8)
+    
+    def PushSubmitted():
+        
+        Name.append(PushNameEntry.get())
+        Stock.append(PushStockEntry.get())
+        Price.append(PushPriceEntry.get())
+
+        ControlPush.pack_forget()
+        Save()
+
+    PushSubmit = Button(ControlPush,text="Submit",command=PushSubmitted,width=10)
+    PushSubmit.grid(column=2, row=7)
 
 
 #Saving information
@@ -225,7 +276,7 @@ def Save():
         f.write("{}\n".format(Price[i]))
         i += 1
     f.close()
-    Menu()
+    Reload()
 
 
 
@@ -237,6 +288,3 @@ def Menu():
 
 
 Start()
-
-
-    
