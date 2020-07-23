@@ -9,7 +9,7 @@ Stock = []
 Price = []
 Labels = []
 spacer = "-=-"
-
+TotalSold = 0
 Windowx = "550"
 Windowy = "500"
 WindowName = "Comic Book Shop"
@@ -20,6 +20,8 @@ MenuF = Frame(window)
 DisplayF = Frame(window)
 ControlPush = Frame(window)
 ControlRemove = Frame(window)
+ControlAddStock = Frame(window)
+TotalSoldF = Frame(window)
 IDL = Label(DisplayF, text="ID:", borderwidth=2,width = 5, relief="solid")
 IDL.grid(column=0,row=1)
 NameL = Label(DisplayF, text="Name:", borderwidth=2,width = 25, relief="solid")
@@ -34,6 +36,7 @@ PriceL.grid(column=3,row=1)
 
 #Creates lists based off stored data in file
 def Start():
+    global TotalSold
     space = 0
     f = open("database.txt", "r")
     i = 1
@@ -55,21 +58,19 @@ def Start():
         elif space == 2:
             Price.append(data)
         elif space == 3:
+            TotalSold = data
+        elif space == 4:
             break
-    
 
+    
     PushB = Button(MenuF,width=10,text="Push",command=Push)
     PushB.grid(column=1, row=1)
-    PullB = Button(MenuF,width=10,text="Pull",command=Pull)
-    PullB.grid(column=2, row=1)
     RemoveB = Button(MenuF,width=10,text="Remove",command=Remove)
     RemoveB.grid(column=3, row=1)
-    EditB = Button(MenuF,width=10,text="Edit",command=Edit)
-    EditB.grid(column=4, row=1)
+    SaleB = Button(MenuF,width=10,text="Sell",command=Sale)
+    SaleB.grid(column=4, row=1)
     AddStockB = Button(MenuF,width=11,text="Add Stock",command=AddStock)
     AddStockB.grid(column=5, row=1)
-    CheckStockB = Button(MenuF,width=12,text="Check Stock",command=CheckStock)
-    CheckStockB.grid(column=6, row=1)
     CloseB = Button(MenuF,width=10,text="Close",command=Close)
     CloseB.grid(column=7, row=1)
 
@@ -94,75 +95,86 @@ def Reload():
         TableItem.grid(column=3,row=i + 2)
         Labels.append(TableItem)
         i += 1
+    TotalSoldF.pack()
+    TableItem = Label(TotalSoldF, text="Total Sold:", borderwidth=2,width = 25, relief="groove")
+    TableItem.grid(column=1,row=1)
+    Labels.append(TableItem)
+    TableItem = Label(TotalSoldF, text=TotalSold, borderwidth=2,width = 5, relief="groove",justify=RIGHT)
+    TableItem.grid(column=2,row=1)
+    Labels.append(TableItem)
     Menu()
     
 
 
 
 def AddStock():
-    ID = int(input("What entry would you like to add stock too?\n")) - 1
-    NewStock = int(input("New Stock for {}:\nCurrent: {}\n".format(Name[ID],Stock[ID])))
-    Stock[ID] = int(Stock[ID]) + NewStock
-    print("Restocked {}\nNew Stock: {}".format(Name[ID], Stock[ID]))
-    print("\n----------=+=----------")
-    skip = input("Press 'Enter' to continue")
-    print("\n\n")
-    Save()
+    DisplayF.pack_forget()
+    MenuF.pack_forget()
+    TotalSoldF.pack_forget()
+    ControlAddStock.pack()
+    AddStockIDLabel = Label(ControlAddStock,text="ID:")
+    AddStockIDLabel.grid(column=1, row=4)
+    AddStockIDEntry = Entry(ControlAddStock,width=10)
+    AddStockIDEntry.grid(column=2, row=4)
+
+
+    def AddStockSubmitted():
+        AddStockID = int(AddStockIDEntry.get()) - 1 
+
+        AddStockIDEntry.grid_forget()
+        AddStockIDLabel.grid_forget()
+
+        AddStockNameLabel = Label(ControlAddStock,text=Name[AddStockID] + " stock:")
+        AddStockNameLabel.grid(column=2, row=0)
+        AddStockCurrentLabel = Label(ControlAddStock,text=Stock[AddStockID])
+        AddStockCurrentLabel.grid(column=1, row=1)
+        AddStockAddLabel = Label(ControlAddStock,text="+")
+        AddStockAddLabel.grid(column=2, row=1)
+        AddStockNewEntry = Entry(ControlAddStock,width = 5)
+        AddStockNewEntry.grid(column=3, row=1)
+
+        def AddStockFinish():
+            Stock[AddstockID] += AddStockNewEntry
+            ControlAddStock.pack_forget()
+            AddStockCurrentLabel.grid_forget()
+            AddStockAddLabel.grid_forget()
+            AddStockNewEntry.grid_forget()
+            Save()
+        
+        AddStockSubmit = Button(ControlAddStock,text="Submit",command=AddStockFinish,width=10)
+        AddStockSubmit.grid(column=2, row=5)
+        
+        
+    AddStockSubmit = Button(ControlAddStock,text="Submit",command=AddStockSubmitted,width=10)
+    AddStockSubmit.grid(column=2, row=5)
+    
+    def AddStockStop():
+        ControlAddStock.pack_forget()
+        Save()
+    AddStockStop = Button(ControlAddStock,text="Back",command=AddStockStop,width=10)
+    AddStockStop.grid(column=2, row=6)
+    #ID = int(input("What entry would you like to add stock too?\n")) - 1
+    #NewStock = int(input("New Stock for {}:\nCurrent: {}\n".format(Name[ID],Stock[ID])))
+    #Stock[ID] = int(Stock[ID]) + NewStock
+    #print("Restocked {}\nNew Stock: {}".format(Name[ID], Stock[ID]))
+    #print("\n----------=+=----------")
+    #skip = input("Press 'Enter' to continue")
+    #print("\n\n")
+    
+    #ControlAddStock.pack_forget()
+    #Save()
 
 def Close():
+    window.quit
     print("Closing...")
 
-
-#Check Stock:
-def CheckStock():
-    LowStock = []
-    i = 0
-    
-    StockBelow = int(input("Stock below or equal too __?\n"))
-    
-    while i < len(Stock):
-        if int(Stock[i]) <= StockBelow:
-            LowStock.append(Name[i])
-            LowStock.append(Stock[i])
-            i += 1
-        else:
-            i += 1
-            continue
-    if len(LowStock) == 0:
-        print("All stock is good")
-    else:
-        print("{} items have low stock\n-----\nItems:\n".format(int(len(LowStock)/2)))
-        i = 0
-        while i < len(LowStock):
-            print("{} | {}".format(LowStock[i],LowStock[i + 1]))
-            i += 2
-        print("\n----------=+=----------")
-        skip = input("Press 'Enter' to continue")
-        print("\n\n")
-
-
-            
-
-
-
-        
-#Getting data:
-def Pull():
-    
-
-    ID = int(input("What entry would you like?\n")) - 1
-
-    print("Name: {}\nStock: {}\nPrice: ${}".format(Name[ID], Stock[ID], Price[ID]))
-    print("\n----------=+=----------")
-    skip = input("Press 'Enter' to continue")
-    print("\n\n")
-    Menu()
 
 
 #Remove data:
 def Remove():
     DisplayF.pack_forget()
     MenuF.pack_forget()
+    TotalSoldF.pack_forget()
     ControlRemove.pack()
     RemoveIDLabel = Label(ControlRemove,text="ID:")
     RemoveIDLabel.grid(column=1, row=4)
@@ -188,25 +200,45 @@ def Remove():
 
 
 
-#Edit data:
-def Edit():
-    ID = int(input("What entry would you like to edit?\n")) - 1
+#Make a sale data:
+def Sale():
+    global TotalSold
+    total_price = 0
+    total_amount = 0
+    receipt = []
 
-    NewName = input("New Name:\nCurrent: {}\nPress 'Enter' to keep original name\n".format(Name[ID]))
-    NewStock = input("New Stock:\nCurrent: {}\nPress 'Enter' to keep original stock\n".format(Stock[ID]))
-    NewPrice = input("New Price:\nCurrent: {}\nPress 'Enter' to keep original price\n".format(Price[ID]))
+    while True:
+        item = int(input("What comic book would you like?\n")) - 1
+        amount = int(input("How many copies of '{}'?\n".format(Name[item])))
 
+        Stock[item] = (int(Stock[item]) - amount)
+        total_price += (float(Price[item]) * float(amount))
+        total_amount += amount
 
-    if str(NewName) != "":
-        Name[ID] = NewName
-    if str(NewStock) != "":
-        Stock[ID] = NewStock
-    if str(NewPrice) != "":
-        Price[ID] = NewPrice
-    print("New data:\nName: {} | Stock: {} | Price: ${}".format(Name[ID], Stock[ID], Price[ID]))
+        receipt.append(Name[item])
+        receipt.append(amount)
+        receipt.append((float(Price[item]) * float(amount)))
+
+        print("-----")
+        skip = int(input("1. Buy More\n2. Finish\n"))
+        if skip == 2:
+            break
+
+    i = -1
+    ItemNumber = 1
+    print("-----\n\n")
+    while i + 3 <= len(receipt):
+        print("{} | {} | {} | {}".format(ItemNumber,receipt[1 + i],receipt[2 + i],receipt[3 + i]))
+        i += 3
+        ItemNumber += 1
+    print("\n-----=+=-----")
+    print("Total items: {}\nTotal cost: {}".format(total_amount,total_price))
     print("\n----------=+=----------")
     skip = input("Press 'Enter' to continue")
     print("\n\n")
+    
+    TotalSold = int(total_amount) + int(TotalSold)
+
     Save()
 
 
@@ -214,6 +246,7 @@ def Edit():
 
 #Adding new data
 def Push():
+    TotalSoldF.pack_forget()
     DisplayF.pack_forget()
     MenuF.pack_forget()
     ControlPush.pack()
@@ -275,6 +308,9 @@ def Save():
     while i != len(Price):
         f.write("{}\n".format(Price[i]))
         i += 1
+    f.write(spacer + "\n")
+    f.write("#Number Sold:\n")
+    f.write("{}\n".format(TotalSold))
     f.close()
     Reload()
 
@@ -282,9 +318,7 @@ def Save():
 
 def Menu():
     
-
     MenuF.pack(padx=1,pady=1)
     DisplayF.pack(padx=1,pady=1)
-
 
 Start()
