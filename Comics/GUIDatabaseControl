@@ -108,6 +108,8 @@ def Reload():
 
 
 def AddStock():
+    global state
+    state = 0
     DisplayF.pack_forget()
     MenuF.pack_forget()
     TotalSoldF.pack_forget()
@@ -119,7 +121,8 @@ def AddStock():
 
 
     def AddStockSubmitted():
-        AddStockID = int(AddStockIDEntry.get()) - 1 
+
+        AddStockID = int(AddStockIDEntry.get()) - 1
 
         AddStockIDEntry.grid_forget()
         AddStockIDLabel.grid_forget()
@@ -133,36 +136,39 @@ def AddStock():
         AddStockNewEntry = Entry(ControlAddStock,width = 5)
         AddStockNewEntry.grid(column=3, row=1)
 
-        def AddStockFinish():
-            Stock[AddstockID] += AddStockNewEntry
+        def AddStockFinish(AddStockID):
+            AddStockNewEntryValue = int(AddStockNewEntry.get())
+            Stock[AddStockID] =  int(Stock[AddStockID]) + int(AddStockNewEntryValue)
             ControlAddStock.pack_forget()
             AddStockCurrentLabel.grid_forget()
             AddStockAddLabel.grid_forget()
             AddStockNewEntry.grid_forget()
             Save()
+
+        def AddStockStop():
+            AddStockNameLabel.grid_forget()
+            AddStockCurrentLabel.grid_forget()
+            AddStockAddLabel.grid_forget()
+            AddStockNewEntry.grid_forget()
+            ControlAddStock.pack_forget()
+            Save()
         
-        AddStockSubmit = Button(ControlAddStock,text="Submit",command=AddStockFinish,width=10)
+        AddStockSubmit = Button(ControlAddStock,text="Submit",command=lambda: AddStockFinish(AddStockID),width=10)
         AddStockSubmit.grid(column=2, row=5)
+        AddStockStop = Button(ControlAddStock,text="Back",command=AddStockStop,width=10)
+        AddStockStop.grid(column=2, row=6)
         
         
     AddStockSubmit = Button(ControlAddStock,text="Submit",command=AddStockSubmitted,width=10)
     AddStockSubmit.grid(column=2, row=5)
     
     def AddStockStop():
+        AddStockIDEntry.grid_forget()
+        AddStockIDLabel.grid_forget()
         ControlAddStock.pack_forget()
         Save()
     AddStockStop = Button(ControlAddStock,text="Back",command=AddStockStop,width=10)
     AddStockStop.grid(column=2, row=6)
-    #ID = int(input("What entry would you like to add stock too?\n")) - 1
-    #NewStock = int(input("New Stock for {}:\nCurrent: {}\n".format(Name[ID],Stock[ID])))
-    #Stock[ID] = int(Stock[ID]) + NewStock
-    #print("Restocked {}\nNew Stock: {}".format(Name[ID], Stock[ID]))
-    #print("\n----------=+=----------")
-    #skip = input("Press 'Enter' to continue")
-    #print("\n\n")
-    
-    #ControlAddStock.pack_forget()
-    #Save()
 
 def Close():
     window.quit
