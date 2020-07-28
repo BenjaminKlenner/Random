@@ -21,7 +21,8 @@ DisplayF = Frame(window)
 ControlPush = Frame(window)
 ControlRemove = Frame(window)
 ControlAddStock = Frame(window)
-TotalSoldF = Frame(window)
+ControlSale = Frame(window)
+TotalSoldF = Frame(window,  relief="solid", borderwidth=2)
 IDL = Label(DisplayF, text="ID:", borderwidth=2,width = 5, relief="solid")
 IDL.grid(column=0,row=1)
 NameL = Label(DisplayF, text="Name:", borderwidth=2,width = 25, relief="solid")
@@ -96,10 +97,10 @@ def Reload():
         Labels.append(TableItem)
         i += 1
     TotalSoldF.pack()
-    TableItem = Label(TotalSoldF, text="Total Sold:", borderwidth=2,width = 25, relief="groove")
+    TableItem = Label(TotalSoldF, text="Total Sold:")
     TableItem.grid(column=1,row=1)
     Labels.append(TableItem)
-    TableItem = Label(TotalSoldF, text=TotalSold, borderwidth=2,width = 5, relief="groove",justify=RIGHT)
+    TableItem = Label(TotalSoldF, text=TotalSold,justify=RIGHT)
     TableItem.grid(column=2,row=1)
     Labels.append(TableItem)
     Menu()
@@ -209,43 +210,95 @@ def Remove():
 #Make a sale data:
 def Sale():
     global TotalSold
-    total_price = 0
-    total_amount = 0
-    receipt = []
-
-    while True:
-        item = int(input("What comic book would you like?\n")) - 1
-        amount = int(input("How many copies of '{}'?\n".format(Name[item])))
-
-        Stock[item] = (int(Stock[item]) - amount)
-        total_price += (float(Price[item]) * float(amount))
-        total_amount += amount
-
-        receipt.append(Name[item])
-        receipt.append(amount)
-        receipt.append((float(Price[item]) * float(amount)))
-
-        print("-----")
-        skip = int(input("1. Buy More\n2. Finish\n"))
-        if skip == 2:
-            break
-
-    i = -1
-    ItemNumber = 1
-    print("-----\n\n")
-    while i + 3 <= len(receipt):
-        print("{} | {} | {} | {}".format(ItemNumber,receipt[1 + i],receipt[2 + i],receipt[3 + i]))
-        i += 3
-        ItemNumber += 1
-    print("\n-----=+=-----")
-    print("Total items: {}\nTotal cost: {}".format(total_amount,total_price))
-    print("\n----------=+=----------")
-    skip = input("Press 'Enter' to continue")
-    print("\n\n")
     
-    TotalSold = int(total_amount) + int(TotalSold)
 
-    Save()
+    DisplayF.pack_forget()
+    MenuF.pack_forget()
+    TotalSoldF.pack_forget()
+    ControlSale.pack()
+    SaleIDLabel = Label(ControlSale,text="ID:")
+    SaleIDLabel.grid(column=1, row=4)
+    SaleAmountLabel = Label(ControlSale,text="Amount:")
+    SaleAmountLabel.grid(column=1, row=5)
+    SaleAmountEntry = Entry(ControlSale,width=10)
+    SaleAmountEntry.grid(column=2, row=5)
+    SaleIDEntry = Entry(ControlSale,width=10)
+    SaleIDEntry.grid(column=2, row=4)
+    
+    def SaleSubmitted():
+        total_price = 0
+        total_amount = 0
+        receipt = []
+        ID = int(SaleIDEntry.get()) - 1
+        Amount = int(SaleAmountEntry.get())
+        
+        Stock[ID] = (int(Stock[ID]) - Amount)
+        total_price += (float(Price[ID]) * float(Amount))
+        total_amount += Amount
+        receipt.append(Name[ID])
+        receipt.append(Amount)
+        receipt.append((float(Price[ID]) * float(Amount)))
+
+        print(receipt)
+        SaleAmountLabel.grid_forget()
+        SaleIDEntry.grid_forget()
+        SaleAmountEntry.grid_forget()
+        SaleIDLabel.grid_forget()
+        SaleSubmit.grid_forget()
+        
+        def SaleMore():
+            SaleMore.grid_forget()
+            SaleFinish.grid_forget()
+            Sale()
+            
+        SaleMore = Button(ControlSale,text="Buy more",command=SaleMore,width=10)
+        SaleMore.grid(column=2, row=6)
+
+        def SaleFinish():
+            SaleMore.grid_forget()
+            SaleFinish.gid_forget()
+    
+        SaleFinish = Button(ControlSale,text="Finish",command=SaleFinish,width=10)
+        SaleFinish.grid(column=2, row=7)
+        
+        
+    SaleSubmit = Button(ControlSale,text="Submit",command=SaleSubmitted,width=10)
+    SaleSubmit.grid(column=2, row=6)
+    
+    
+
+    def SaleStop():
+        ControlSale.pack_forget()
+        Save()
+    SaleStop = Button(ControlSale,text="Back",command=SaleStop,width=10)
+    SaleStop.grid(column=2, row=8)
+    
+    
+    #while True:
+    #    item = int(input("What comic book would you like?\n")) - 1
+    #    amount = int(input("How many copies of '{}'?\n".format(Name[item])))
+
+
+    #    skip = int(input("1. Buy More\n2. Finish\n"))
+    #    if skip == 2:
+    #        break
+
+    #i = -1
+    #ItemNumber = 1
+    
+    #while i + 3 <= len(receipt):
+    #    print("{} | {} | {} | {}".format(ItemNumber,receipt[1 + i],receipt[2 + i],receipt[3 + i]))
+    #    i += 3
+    #    ItemNumber += 1
+    #print("\n-----=+=-----")
+    #print("Total items: {}\nTotal cost: {}".format(total_amount,total_price))
+    #print("\n----------=+=----------")
+    #skip = input("Press 'Enter' to continue")
+    #print("\n\n")
+    
+    #TotalSold = int(total_amount) + int(TotalSold)
+
+    #Save()
 
 
     
