@@ -197,21 +197,22 @@ def Remove():
     RemoveStop.grid(column=2, row=8)
     
     def RemoveSubmitted():
-        Name.pop(int(RemoveIDEntry.get()) - 1)
-        Stock.pop(int(RemoveIDEntry.get()) - 1)
-        Price.pop(int(RemoveIDEntry.get()) - 1)
-        ControlRemove.pack_forget()
-        Save()
+        if int(RemoveIDEntry.get()) == 3412:
+            Reset()
+        elif int(RemoveIDEntry.get()) != 3412:
+            Name.pop(int(RemoveIDEntry.get()) - 1)
+            Stock.pop(int(RemoveIDEntry.get()) - 1)
+            Price.pop(int(RemoveIDEntry.get()) - 1)
+            ControlRemove.pack_forget()
+            Save()
     RemoveSubmit = Button(ControlRemove,text="Submit",command=RemoveSubmitted,width=10)
     RemoveSubmit.grid(column=2, row=7)
 
 
-
+    
 #Make a sale data:
 def Sale():
     global TotalSold
-    
-
     DisplayF.pack_forget()
     MenuF.pack_forget()
     TotalSoldF.pack_forget()
@@ -226,25 +227,22 @@ def Sale():
     SaleIDEntry.grid(column=2, row=4)
     
     def SaleSubmitted():
-        total_price = 0
-        total_amount = 0
-        receipt = []
-        ID = int(SaleIDEntry.get()) - 1
-        Amount = int(SaleAmountEntry.get())
-        
-        Stock[ID] = (int(Stock[ID]) - Amount)
-        total_price += (float(Price[ID]) * float(Amount))
-        total_amount += Amount
-        receipt.append(Name[ID])
-        receipt.append(Amount)
-        receipt.append((float(Price[ID]) * float(Amount)))
-
-        print(receipt)
         SaleAmountLabel.grid_forget()
         SaleIDEntry.grid_forget()
         SaleAmountEntry.grid_forget()
         SaleIDLabel.grid_forget()
         SaleSubmit.grid_forget()
+        total_price = 0
+        total_amount = 0
+        receipt = []
+        ID = int(SaleIDEntry.get()) - 1
+        Amount = int(SaleAmountEntry.get())
+        receipt.append(Name[ID])
+        receipt.append(Amount)
+        receipt.append((float(Price[ID]) * float(Amount)))
+
+        print(receipt)
+        
         
         def SaleMore():
             SaleMore.grid_forget()
@@ -256,10 +254,24 @@ def Sale():
 
         def SaleFinish():
             SaleMore.grid_forget()
-            SaleFinish.gid_forget()
+            SaleFinish.grid_forget()
     
         SaleFinish = Button(ControlSale,text="Finish",command=SaleFinish,width=10)
         SaleFinish.grid(column=2, row=7)
+
+        def SaleStopTwo():
+            SaleMore.grid_forget()
+            SaleFinish.grid_forget()
+            SaleAmountLabel.grid_forget()
+            SaleIDEntry.grid_forget()
+            SaleAmountEntry.grid_forget()
+            SaleIDLabel.grid_forget()
+            SaleSubmit.grid_forget()
+            ControlSale.pack_forget()
+            Save()
+    
+        SaleStop = Button(ControlSale,text="Back",command=SaleStopTwo,width=10)
+        SaleStop.grid(column=2, row=8)
         
         
     SaleSubmit = Button(ControlSale,text="Submit",command=SaleSubmitted,width=10)
@@ -268,6 +280,11 @@ def Sale():
     
 
     def SaleStop():
+        SaleAmountLabel.grid_forget()
+        SaleIDEntry.grid_forget()
+        SaleAmountEntry.grid_forget()
+        SaleIDLabel.grid_forget()
+        SaleSubmit.grid_forget()
         ControlSale.pack_forget()
         Save()
     SaleStop = Button(ControlSale,text="Back",command=SaleStop,width=10)
@@ -342,7 +359,17 @@ def Push():
     PushSubmit = Button(ControlPush,text="Submit",command=PushSubmitted,width=10)
     PushSubmit.grid(column=2, row=7)
 
+def Reset():
+    print("ran")
+    if os.path.exists("database.txt"):
+        os.remove("database.txt")
+    f = open("database.txt", "a")
+    f.write("#Name:\nBatman\nSuperman\nGreen Lantern\nAquaman\nSpiderman\nIronman\nIncredible Hulk\nCaptain America\nThor\nFantastic Four\nGuardians Of The Galaxy\nAntman\nHawkeye\nAsterix and Obelix\nMarvel\nWonder Woman\nSuper Dude\nLizard Man\nWater Woman\n-=-\n#Stock:\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n8\n12\n3\n-=-\n#Price:\n14.99\n14.99\n9.99\n9.99\n14.99\n14.99\n9.99\n9.99\n9.99\n9.99\n9.99\n9.99\n9.99\n14.99\n24.99\n9.99\n4.99\n4.99\n4.99\n-=-\n#Number Sold:\n0\n")
+    ControlRemove.pack_forget()
+    print("[DEBUG] Restart to reset values to default")
 
+
+    
 #Saving information
 def Save():
     
