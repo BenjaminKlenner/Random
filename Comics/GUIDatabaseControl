@@ -8,7 +8,9 @@ Name = []
 Stock = []
 Price = []
 Labels = []
+receipt = []
 spacer = "-=-"
+orderstart = True
 TotalSold = 0
 Windowx = "550"
 Windowy = "500"
@@ -22,6 +24,7 @@ ControlPush = Frame(window)
 ControlRemove = Frame(window)
 ControlAddStock = Frame(window)
 ControlSale = Frame(window)
+ReceiptF = Frame(window)
 TotalSoldF = Frame(window,  relief="solid", borderwidth=2)
 IDL = Label(DisplayF, text="ID:", borderwidth=2,width = 5, relief="solid")
 IDL.grid(column=0,row=1)
@@ -212,6 +215,9 @@ def Remove():
     
 #Make a sale data:
 def Sale():
+    
+    if orderstart == True:
+        receipt = []
     global TotalSold
     DisplayF.pack_forget()
     MenuF.pack_forget()
@@ -232,14 +238,13 @@ def Sale():
         SaleAmountEntry.grid_forget()
         SaleIDLabel.grid_forget()
         SaleSubmit.grid_forget()
-        total_price = 0
-        total_amount = 0
-        receipt = []
         ID = int(SaleIDEntry.get()) - 1
         Amount = int(SaleAmountEntry.get())
-        receipt.append(Name[ID])
+        global receipt
+        receipt.append(ID)
         receipt.append(Amount)
-        receipt.append((float(Price[ID]) * float(Amount)))
+        global orderstart
+        orderstart = False
 
         print(receipt)
         
@@ -247,14 +252,86 @@ def Sale():
         def SaleMore():
             SaleMore.grid_forget()
             SaleFinish.grid_forget()
+            global receipt
             Sale()
             
         SaleMore = Button(ControlSale,text="Buy more",command=SaleMore,width=10)
         SaleMore.grid(column=2, row=6)
 
         def SaleFinish():
-            SaleMore.grid_forget()
-            SaleFinish.grid_forget()
+            global receipt
+            prices = []
+            amounts = []
+            total_amount = 0
+            total_price = 0
+            i = 0
+            while i < len(receipt):
+                SaleMore.grid_forget()
+                SaleFinish.grid_forget()
+                ControlSale.pack_forget()
+                ReceiptF.pack()
+                tempID = receipt[i]
+                Stock[tempID] = int(Stock[tempID]) - int(receipt[i + 1])
+                prices.append(float(Price[tempID]) * int(receipt[i + 1]))
+                total_price += float(Price[tempID]) * int(receipt[i + 1])
+                amounts.append(int(receipt[i + 1]))
+                total_amount += int(receipt[i + 1])
+                i += 2
+
+            i = 0
+            ItemNumber = 1
+            Receipts = []
+            ReceiptItem = Label(ReceiptF, text="Item Number:", borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=0,row=1)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="Names:", borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=1,row=1)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="Amounts:", borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=2,row=1)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="Prices:", borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=3,row=1)
+            Receipts.append(ReceiptItem)
+            while i < len(amounts):
+                ReceiptItem = Label(ReceiptF, text=ItemNumber, borderwidth=2,width = 15, relief="groove")
+                ReceiptItem.grid(column=0,row=i + 2)
+                Receipts.append(ReceiptItem)
+                ReceiptItem = Label(ReceiptF, text=Name[receipt[i]], borderwidth=2,width = 15, relief="groove")
+                ReceiptItem.grid(column=1,row=i + 2)
+                Receipts.append(ReceiptItem)
+                ReceiptItem = Label(ReceiptF, text=amounts[i], borderwidth=2,width = 15, relief="groove")
+                ReceiptItem.grid(column=2,row=i + 2)
+                Receipts.append(ReceiptItem)
+                ReceiptItem = Label(ReceiptF, text=prices[i], borderwidth=2,width = 15, relief="groove")
+                ReceiptItem.grid(column=3,row=i + 2)
+                Receipts.append(ReceiptItem)
+
+                i += 1
+                ItemNumber += 1
+            ReceiptItem = Label(ReceiptF, text=total_amount, borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=1,row=i + 4)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="Total Amount:", borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=1,row=i + 3)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="Total price:", borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=2,row=i + 3)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text=total_price, borderwidth=2,width = 15, relief="groove")
+            ReceiptItem.grid(column=2,row=i + 4)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="", borderwidth=2,width = 15)
+            ReceiptItem.grid(column=1,row=i + 2)
+            Receipts.append(ReceiptItem)
+            ReceiptItem = Label(ReceiptF, text="", borderwidth=2,width = 15)
+            ReceiptItem.grid(column=2,row=i + 2)
+            Receipts.append(ReceiptItem)
+
+            SaleComplete = Button(ReceiptF, text="Complete", command=Save,width=10)
+            SaleStop.grid(column=2, row=i + 5)
+            
+            receipt = []
     
         SaleFinish = Button(ControlSale,text="Finish",command=SaleFinish,width=10)
         SaleFinish.grid(column=2, row=7)
@@ -268,6 +345,8 @@ def Sale():
             SaleIDLabel.grid_forget()
             SaleSubmit.grid_forget()
             ControlSale.pack_forget()
+            global receipt
+            receipt = []
             Save()
     
         SaleStop = Button(ControlSale,text="Back",command=SaleStopTwo,width=10)
@@ -286,6 +365,8 @@ def Sale():
         SaleIDLabel.grid_forget()
         SaleSubmit.grid_forget()
         ControlSale.pack_forget()
+        global receipt
+        receipt = []
         Save()
     SaleStop = Button(ControlSale,text="Back",command=SaleStop,width=10)
     SaleStop.grid(column=2, row=8)
