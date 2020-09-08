@@ -143,6 +143,7 @@ def AddStock():
         def AddStockFinish(AddStockID):
             AddStockNewEntryValue = int(AddStockNewEntry.get())
             Stock[AddStockID] =  int(Stock[AddStockID]) + int(AddStockNewEntryValue)
+            AddStockNameLabel.grid_forget()
             ControlAddStock.pack_forget()
             AddStockCurrentLabel.grid_forget()
             AddStockAddLabel.grid_forget()
@@ -176,8 +177,6 @@ def AddStock():
 
 def Close():
     window.quit
-    print("Closing...")
-
 
 
 #Remove data:
@@ -215,6 +214,17 @@ def Remove():
     
 #Make a sale data:
 def Sale():
+
+    def SaleStop():
+        SaleAmountLabel.grid_forget()
+        SaleIDEntry.grid_forget()
+        SaleAmountEntry.grid_forget()
+        SaleIDLabel.grid_forget()
+        SaleSubmit.grid_forget()
+        ControlSale.pack_forget()
+        global receipt
+        receipt = []
+        Save()
     
     if orderstart == True:
         receipt = []
@@ -246,7 +256,6 @@ def Sale():
         global orderstart
         orderstart = False
 
-        print(receipt)
         
         
         def SaleMore():
@@ -328,8 +337,10 @@ def Sale():
             ReceiptItem.grid(column=2,row=i + 2)
             Receipts.append(ReceiptItem)
 
-            SaleComplete = Button(ReceiptF, text="Complete", command=Save,width=10)
-            SaleStop.grid(column=2, row=i + 5)
+            SaleComplete = Button(ReceiptF, text="Complete", command=SaleStopTwo,width=10)
+            SaleComplete.grid(column=3, row=i + 5)
+            ReceiptItem.grid_forget()
+        
             
             receipt = []
     
@@ -337,6 +348,7 @@ def Sale():
         SaleFinish.grid(column=2, row=7)
 
         def SaleStopTwo():
+            ReceiptF.pack_forget()
             SaleMore.grid_forget()
             SaleFinish.grid_forget()
             SaleAmountLabel.grid_forget()
@@ -358,45 +370,11 @@ def Sale():
     
     
 
-    def SaleStop():
-        SaleAmountLabel.grid_forget()
-        SaleIDEntry.grid_forget()
-        SaleAmountEntry.grid_forget()
-        SaleIDLabel.grid_forget()
-        SaleSubmit.grid_forget()
-        ControlSale.pack_forget()
-        global receipt
-        receipt = []
-        Save()
     SaleStop = Button(ControlSale,text="Back",command=SaleStop,width=10)
     SaleStop.grid(column=2, row=8)
     
     
-    #while True:
-    #    item = int(input("What comic book would you like?\n")) - 1
-    #    amount = int(input("How many copies of '{}'?\n".format(Name[item])))
 
-
-    #    skip = int(input("1. Buy More\n2. Finish\n"))
-    #    if skip == 2:
-    #        break
-
-    #i = -1
-    #ItemNumber = 1
-    
-    #while i + 3 <= len(receipt):
-    #    print("{} | {} | {} | {}".format(ItemNumber,receipt[1 + i],receipt[2 + i],receipt[3 + i]))
-    #    i += 3
-    #    ItemNumber += 1
-    #print("\n-----=+=-----")
-    #print("Total items: {}\nTotal cost: {}".format(total_amount,total_price))
-    #print("\n----------=+=----------")
-    #skip = input("Press 'Enter' to continue")
-    #print("\n\n")
-    
-    #TotalSold = int(total_amount) + int(TotalSold)
-
-    #Save()
 
 
     
@@ -441,13 +419,11 @@ def Push():
     PushSubmit.grid(column=2, row=7)
 
 def Reset():
-    print("ran")
     if os.path.exists("database.txt"):
         os.remove("database.txt")
     f = open("database.txt", "a")
     f.write("#Name:\nBatman\nSuperman\nGreen Lantern\nAquaman\nSpiderman\nIronman\nIncredible Hulk\nCaptain America\nThor\nFantastic Four\nGuardians Of The Galaxy\nAntman\nHawkeye\nAsterix and Obelix\nMarvel\nWonder Woman\nSuper Dude\nLizard Man\nWater Woman\n-=-\n#Stock:\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n20\n8\n12\n3\n-=-\n#Price:\n14.99\n14.99\n9.99\n9.99\n14.99\n14.99\n9.99\n9.99\n9.99\n9.99\n9.99\n9.99\n9.99\n14.99\n24.99\n9.99\n4.99\n4.99\n4.99\n-=-\n#Number Sold:\n0\n")
     ControlRemove.pack_forget()
-    print("[DEBUG] Restart to reset values to default")
 
 
     
