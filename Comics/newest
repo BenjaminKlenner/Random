@@ -8,9 +8,10 @@ import random
 # Create the book class
 class book:
   """The book class stores the details of each book and has methods to restock, sell and calculate progress towards the Super Dude goal"""
-  def __init__(self, name, stock):
+  def __init__(self, name, stock, sold):
     self.name = name
     self.stock = stock
+    self.sold = sold
     book_list.append(self)
   
   # restock method adds stock to stock
@@ -25,6 +26,7 @@ class book:
   def sell(self, amount):
     if amount > 0 and amount <= self.stock:
       self.stock -= amount
+      self.sold += amount
       return True
     else:
       return False
@@ -47,7 +49,7 @@ def update_stock():
   # Append each books stock to the label
   for book in book_list:
     stock_string += "{}: {}\n".format(book.name, book.stock)
-    
+    total_sold += book.sold
   stock_string += "\nTotal Stock Sold: {}".format(total_sold)
   book_details.set(stock_string)
 
@@ -94,9 +96,9 @@ sell_message = ("Sale made")
 
 
 # Create instances of the class
-Comic1 = book("Super Dude", 8)
-Comic2 = book("Lizard Man", 12)
-Comic3 = book("Water Woman", 3)
+Comic1 = book("Super Dude", 8, 0)
+Comic2 = book("Lizard Man", 12, 0)
+Comic3 = book("Water Woman", 3, 0)
 book_names = create_name_list()
 
 ##################  GUI CODE  ######################
